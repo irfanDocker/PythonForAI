@@ -106,14 +106,41 @@ for category, revenue in category_revenue.items():
 
 
 ##Extract unique products using sets
-unique_products = {product for _, product, _, _ in orders}
 
-print("Unique Products:")
+
+orders = [("Shawn", "Wireless Mouse", 99.9, "Electric device"),
+          ("James", "Iphone 17", 1199.9, "Electric device"),
+          ("Sarah", "Apple", 2.9, "Fruit"),
+          ("David", "USB-C Cable", 9.9, "Electric device")]
+
+unique_products = set()
+for name, product, price, category in orders:
+    unique_products.add(product)
+
 print(unique_products)
-
-
 
 ##5. Organize and Display Data
 ##Print a summary of each customer’s total spending and classification
+print("Customer Spending Summary:")
+for customer, data in customerSummary.items():
+    print(f"{customer}: ${data['total']:.2f} → {data['class']}")
 ##Use set operations to find customers purchasing from multiple categories
-##Identify customers who bought both Electronics and Clothing
+
+categories_by_customer = {}
+for customer, order_list in Customer_Order.items():
+    # create a set of categories this customer bought from
+    categories = {category for _, _, category in order_list}
+    categories_by_customer[customer] = categories
+
+# find those with more than one category
+multi_category_customers = [cust for cust, cats in categories_by_customer.items() if len(cats) > 1]
+print("Customers buying from multiple categories:", multi_category_customers)
+
+##Identify customers who bought both Electronics and Clothing1
+
+target_categories = {"Electric device", "Clothing"}
+
+both_electronics_and_clothing = [
+    cust for cust, cats in categories_by_customer.items()
+    if target_categories.issubset(cats)
+]
